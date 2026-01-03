@@ -205,10 +205,9 @@ class AIContentScraper:
                 from urllib.parse import urlparse
                 try:
                     parsed = urlparse(src)
-                    # Check if domain ends with youtube.com or is youtu.be
-                    if (parsed.netloc.endswith("youtube.com") or 
-                        parsed.netloc == "youtu.be" or
-                        parsed.netloc.endswith(".youtube.com")):
+                    netloc = parsed.netloc.lower()
+                    # Only accept exact YouTube domains
+                    if netloc in ("www.youtube.com", "youtube.com", "youtu.be", "m.youtube.com"):
                         videos.append(src)
                 except Exception:
                     pass
