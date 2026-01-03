@@ -206,3 +206,68 @@ This project is open source and available under the MIT License.
 ## Support
 
 For issues, questions, or contributions, please open an issue on GitHub.
+## 🌐 Universal AI Materials Scraper
+
+The **Universal Scraper** extracts ALL types of materials needed for AI training in a single operation!
+
+### Supported Material Types (12 Total)
+
+1. **📝 Text/NLP** - Articles, documentation, blog posts for language models
+2. **🖼️ Images** - Photos, diagrams, illustrations for computer vision
+3. **🎥 Videos** - Video files and embeds for video understanding AI
+4. **🎵 Audio** - Audio files (MP3, WAV, etc.) for speech/music AI
+5. **💻 Code** - Code snippets in 15+ languages for code generation AI
+6. **📊 Datasets** - CSV, JSON, Excel files for direct ML training
+7. **📄 PDFs** - Documents for document AI and OCR
+8. **📋 Tables** - HTML tables for tabular data AI
+9. **❓ Q&A Pairs** - Question-answer pairs for chatbot training
+10. **💬 Dialogues** - Conversations for dialogue AI
+11. **📜 Transcripts** - Video/audio transcripts for NLU
+12. **🏷️ Annotations** - Pre-labeled data for supervised learning
+
+### Quick Start
+
+```bash
+# Via Web UI
+python run.py
+# Click "🌐 Universal Scraper (All Materials)"
+# Enter URL and scrape!
+
+# Via Python
+from universal_scraper import get_universal_scraper
+
+scraper = get_universal_scraper()
+materials = scraper.scrape_all_materials("https://example.com")
+scraper.save_to_db(materials)
+
+# Via API
+curl -X POST http://localhost:5000/api/scrape/universal \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com"}'
+```
+
+### See Complete Guide
+
+For detailed information about all material types, use cases, and training formats:
+👉 **[AI Materials Guide](AI_MATERIALS_GUIDE.md)**
+
+### What Makes This Complete?
+
+✅ Covers **all major AI domains**: Language, Vision, Speech, Code, Data, Documents, Conversations
+✅ Extracts **12 distinct material types** in one operation
+✅ Calculates **richness score** based on material diversity
+✅ Exports in **training-ready formats**
+✅ Shows which material types were found
+✅ No manual configuration needed
+
+### AI Use Cases Covered
+
+- 🗣️ **Language Models** (GPT, BERT): Text, Q&A, dialogues
+- 👁️ **Computer Vision** (CNN, YOLO): Images, videos, annotations
+- 🎵 **Speech AI** (Whisper, TTS): Audio, transcripts
+- 💻 **Code AI** (Codex, CodeLlama): Code snippets, documentation
+- 📊 **Data Science AI** (TabNet): Tables, datasets
+- 📄 **Document AI** (LayoutLM): PDFs, structured documents
+- 💬 **Conversational AI** (ChatGPT): Dialogues, Q&A
+- 🌐 **Multimodal AI** (CLIP, Flamingo): Images+text, videos+transcripts
+

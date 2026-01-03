@@ -623,3 +623,78 @@ function exportTraining(contentType = null) {
         : '/api/export/training';
     window.location.href = url;
 }
+
+// Universal Scraper Functions
+
+function showUniversalScraper() {
+    const panel = document.getElementById('universal-scraper-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    // Hide other panels
+    document.getElementById('image-scraper-panel').style.display = 'none';
+    document.getElementById('code-scraper-panel').style.display = 'none';
+}
+
+async function scrapeUniversal() {
+    const url = document.getElementById('universal-url-input').value.trim();
+    
+    if (!url) {
+        showStatus('Please enter a URL', 'error');
+        return;
+    }
+    
+    showStatus('Scraping all AI training materials...', 'info');
+    const resultsDiv = document.getElementById('universal-results');
+    resultsDiv.innerHTML = '<div class="loading">🔄 Extracting all material types...</div>';
+    resultsDiv.style.display = 'block';
+    
+    try {
+        const response = await fetch('/api/scrape/universal', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showStatus(`✅ ${data.message}`, 'success');
+            document.getElementById('universal-url-input').value = '';
+            
+            // Display results
+            if (data.data && data.data.material_types) {
+                const types = data.data.material_types;
+                const richness = (data.data.richness_score * 100).toFixed(0);
+                
+                let html = '<div class="universal-results-panel">';
+                html += `<h4>✅ Found ${types.length} Material Types (Richness: ${richness}%)</h4>`;
+                html += '<div class="found-materials">';
+                
+                const typeIcons = {
+                    'text': '📝', 'image': '🖼️', 'video': '🎥', 'audio': '🎵',
+                    'code': '💻', 'dataset': '📊', 'pdf': '📄', 'table': '📋',
+                    'qa': '❓', 'dialogue': '💬', 'transcript': '📜', 'annotation': '🏷️'
+                };
+                
+                types.forEach(type => {
+                    const icon = typeIcons[type] || '📦';
+                    html += `<span class="material-badge found">${icon} ${type.toUpperCase()}</span>`;
+                });
+                
+                html += '</div></div>';
+                resultsDiv.innerHTML = html;
+            }
+            
+            loadStatistics();
+            loadContent();
+        } else {
+            showStatus(`❌ ${data.message}`, 'error');
+            resultsDiv.style.display = 'none';
+        }
+    } catch (error) {
+        console.error('Error scraping universal:', error);
+        showStatus('Error scraping materials', 'error');
+        resultsDiv.style.display = 'none';
+    }
+}

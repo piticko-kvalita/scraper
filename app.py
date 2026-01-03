@@ -17,6 +17,7 @@ from settings_manager import get_settings_manager
 from image_scraper import get_image_scraper
 from code_scraper import get_code_scraper
 from export_manager import get_exporter
+from universal_scraper import get_universal_scraper
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -37,6 +38,7 @@ scraper = AIContentScraper(use_ai=use_ai, ai_helper=ai_helper if use_ai else Non
 # Initialize specialized scrapers
 image_scraper = get_image_scraper()
 code_scraper = get_code_scraper()
+universal_scraper = get_universal_scraper()
 
 # Initialize exporter
 exporter = get_exporter()
@@ -295,6 +297,22 @@ def scrape_code():
     result = code_scraper.scrape_code(url, min_snippets)
     if "error" not in result:
         save_result = code_scraper.save_to_db(result)
+        return jsonify(save_result)
+    
+    return jsonify({"success": False, "message": result["error"]})
+
+@app.route("/api/scrape/universal", methods=["POST"])
+def scrape_universal():
+    """Scrape URL for ALL types of AI training materials."""
+    data = request.get_json()
+    url = data.get("url")
+    
+    if not url:
+        return jsonify({"success": False, "message": "URL is required"}), 400
+    
+    result = universal_scraper.scrape_all_materials(url)
+    if "error" not in result:
+        save_result = universal_scraper.save_to_db(result)
         return jsonify(save_result)
     
     return jsonify({"success": False, "message": result["error"]})

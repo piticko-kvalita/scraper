@@ -59,9 +59,40 @@
                     <h3>🎯 Specialized Scrapers</h3>
                     <p class="help-text">Run dedicated scrapers for specific content types</p>
                     <div class="scraper-buttons">
+                        <button onclick="showUniversalScraper()" class="btn btn-success">🌐 Universal Scraper (All Materials)</button>
                         <button onclick="showImageScraper()" class="btn btn-primary">🖼️ Image Scraper</button>
                         <button onclick="showCodeScraper()" class="btn btn-primary">💻 Code Scraper</button>
                     </div>
+                </div>
+                
+                <!-- Universal Scraper Panel -->
+                <div id="universal-scraper-panel" class="scraper-panel" style="display: none;">
+                    <h4>🌐 Universal AI Materials Scraper</h4>
+                    <p class="help-text">Extract ALL types of AI training materials: text, images, video, audio, code, datasets, PDFs, tables, Q&A, dialogues, transcripts, annotations</p>
+                    <div class="material-types-grid">
+                        <span class="material-badge">📝 Text/NLP</span>
+                        <span class="material-badge">🖼️ Images/Vision</span>
+                        <span class="material-badge">🎥 Video</span>
+                        <span class="material-badge">🎵 Audio/Speech</span>
+                        <span class="material-badge">💻 Code</span>
+                        <span class="material-badge">📊 Datasets</span>
+                        <span class="material-badge">📄 PDFs/Documents</span>
+                        <span class="material-badge">📋 Tables/Tabular</span>
+                        <span class="material-badge">❓ Q&A Pairs</span>
+                        <span class="material-badge">💬 Dialogues/Chat</span>
+                        <span class="material-badge">📜 Transcripts</span>
+                        <span class="material-badge">🏷️ Annotations</span>
+                    </div>
+                    <div class="input-group" style="margin-top: 15px;">
+                        <input 
+                            type="url" 
+                            id="universal-url-input" 
+                            placeholder="Enter URL to extract all AI training materials"
+                            class="url-input"
+                        >
+                        <button onclick="scrapeUniversal()" class="btn btn-success">🌐 Scrape All Materials</button>
+                    </div>
+                    <div id="universal-results" class="scraper-results" style="display: none; margin-top: 15px;"></div>
                 </div>
                 
                 <!-- Image Scraper Panel -->

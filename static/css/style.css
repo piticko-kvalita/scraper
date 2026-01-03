@@ -716,3 +716,61 @@ header h1 {
 .export-section button:last-child {
     margin-bottom: 0;
 }
+
+/* Universal Scraper */
+.material-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.material-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #f0f7ff;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.material-badge.found {
+    background: #10b981;
+    color: white;
+    border-color: #059669;
+    font-weight: 600;
+}
+
+.universal-results-panel {
+    padding: 15px;
+    background: #f0fdf4;
+    border: 2px solid #10b981;
+    border-radius: 8px;
+}
+
+.universal-results-panel h4 {
+    margin-bottom: 10px;
+    color: #059669;
+}
+
+.found-materials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.scraper-results {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
