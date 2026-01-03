@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Training Materials Scraper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI Training Materials Scraper</h1>
+            <p class="subtitle">Collect and organize AI training resources from across the web</p>
+        </header>
+
+        <!-- Statistics Dashboard -->
+        <div class="dashboard">
+            <div class="stat-card">
+                <div class="stat-value" id="total-items">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-words">0</div>
+                <div class="stat-label">Total Words</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="content-types">0</div>
+                <div class="stat-label">Content Types</div>
+            </div>
+        </div>
+
+        <!-- Scraper Section -->
+        <div class="card">
+            <h2>Scrape New Content</h2>
+            <div class="scraper-form">
+                <div class="input-group">
+                    <input 
+                        type="url" 
+                        id="url-input" 
+                        placeholder="Enter URL to scrape (e.g., https://example.com/ai-article)"
+                        class="url-input"
+                    >
+                    <button onclick="scrapeUrl()" class="btn btn-primary">Scrape</button>
+                </div>
+                
+                <div class="quick-actions">
+                    <button onclick="scrapeDefaults()" class="btn btn-secondary">Scrape Default Sources</button>
+                    <button onclick="showBulkInput()" class="btn btn-secondary">Bulk Scrape</button>
+                </div>
+                
+                <div id="bulk-input" class="bulk-input" style="display: none;">
+                    <textarea 
+                        id="bulk-urls" 
+                        placeholder="Enter multiple URLs (one per line)"
+                        rows="5"
+                    ></textarea>
+                    <button onclick="scrapeBulk()" class="btn btn-primary">Scrape All</button>
+                </div>
+                
+                <div id="scrape-status" class="status-message"></div>
+            </div>
+        </div>
+
+        <!-- Content Display Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Scraped Content</h2>
+                <div class="actions">
+                    <button onclick="refreshContent()" class="btn btn-secondary">Refresh</button>
+                    <button onclick="exportData()" class="btn btn-success">Export JSON</button>
+                </div>
+            </div>
+            
+            <div id="content-list" class="content-list">
+                <div class="loading">Loading content...</div>
+            </div>
+        </div>
+
+        <!-- Content Detail Modal -->
+        <div id="detail-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modal-title"></h2>
+                <div class="modal-meta">
+                    <span id="modal-type" class="badge"></span>
+                    <span id="modal-words"></span>
+                    <span id="modal-date"></span>
+                </div>
+                <div class="modal-url">
+                    <strong>URL:</strong> <a id="modal-url-link" href="#" target="_blank"></a>
+                </div>
+                <div id="modal-content" class="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
