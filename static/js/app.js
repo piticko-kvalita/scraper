@@ -1,9 +1,16 @@
 // AI Training Materials Scraper - Frontend JavaScript
 
-// Load statistics on page load
+// Load statistics on page load and setup event listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadStatistics();
     loadContent();
+    
+    // Allow Enter key to submit URL
+    document.getElementById('url-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            scrapeUrl();
+        }
+    });
 });
 
 // Load and display statistics
@@ -280,12 +287,3 @@ function escapeHtml(text) {
     div.textContent = text;
     return div.innerHTML;
 }
-
-// Allow Enter key to submit URL
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('url-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            scrapeUrl();
-        }
-    });
-});

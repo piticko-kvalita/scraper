@@ -32,7 +32,11 @@ class AIContentScraper:
             response = self.session.get(url, timeout=config.REQUEST_TIMEOUT)
             response.raise_for_status()
             
-            soup = BeautifulSoup(response.content, "lxml")
+            # Try lxml parser first, fall back to html.parser
+            try:
+                soup = BeautifulSoup(response.content, "lxml")
+            except Exception:
+                soup = BeautifulSoup(response.content, "html.parser")
             
             # Extract title
             title = self._extract_title(soup)
