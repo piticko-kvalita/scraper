@@ -4,6 +4,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadStatistics();
     loadContent();
+    checkAIStatus();
+    checkAutoGatherStatus();
     
     // Allow Enter key to submit URL
     document.getElementById('url-input').addEventListener('keypress', (e) => {
@@ -11,6 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
             scrapeUrl();
         }
     });
+    
+    // Allow Enter key for AI suggestions
+    const aiTopicInput = document.getElementById('ai-topic-input');
+    if (aiTopicInput) {
+        aiTopicInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                suggestAIUrls();
+            }
+        });
+    }
 });
 
 // Load and display statistics
@@ -286,4 +298,205 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Check AI status
+async function checkAIStatus() {
+    try {
+        const response = await fetch('/api/ai/status');
+        const data = await response.json();
+        
+        if (data.configured && data.enabled) {
+            document.getElementById('ai-status-card').style.display = 'block';
+            // Show AI features button
+            const quickActions = document.querySelector('.quick-actions');
+            if (!document.getElementById('ai-features-btn')) {
+                const btn = document.createElement('button');
+                btn.id = 'ai-features-btn';
+                btn.className = 'btn btn-success';
+                btn.textContent = '✨ AI Features';
+                btn.onclick = showAIFeatures;
+                quickActions.appendChild(btn);
+            }
+        }
+    } catch (error) {
+        console.error('Error checking AI status:', error);
+    }
+}
+
+// Show AI features panel
+function showAIFeatures() {
+    const panel = document.getElementById('ai-features-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+// Show auto-gather panel
+function showAutoGather() {
+    const panel = document.getElementById('auto-gather-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+// Check auto-gather status
+async function checkAutoGatherStatus() {
+    try {
+        const response = await fetch('/api/auto-gather/status');
+        const data = await response.json();
+        
+        if (data.is_running) {
+            document.getElementById('auto-status-text').textContent = '▶️ Running';
+            document.getElementById('auto-status-text').className = 'status-badge success';
+            document.getElementById('start-auto-btn').disabled = true;
+            document.getElementById('stop-auto-btn').disabled = false;
+        } else {
+            document.getElementById('auto-status-text').textContent = '⏸️ Stopped';
+            document.getElementById('auto-status-text').className = 'status-badge';
+            document.getElementById('start-auto-btn').disabled = false;
+            document.getElementById('stop-auto-btn').disabled = true;
+        }
+        
+        document.getElementById('auto-sources-count').textContent = `${data.sources_count} sources`;
+    } catch (error) {
+        console.error('Error checking auto-gather status:', error);
+    }
+}
+
+// Start auto-gathering
+async function startAutoGather() {
+    try {
+        const response = await fetch('/api/auto-gather/start', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showAutoStatus(data.message, 'success');
+            checkAutoGatherStatus();
+        } else {
+            showAutoStatus(data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error starting auto-gather:', error);
+        showAutoStatus('Error starting auto-gather', 'error');
+    }
+}
+
+// Stop auto-gathering
+async function stopAutoGather() {
+    try {
+        const response = await fetch('/api/auto-gather/stop', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showAutoStatus(data.message, 'success');
+            checkAutoGatherStatus();
+        } else {
+            showAutoStatus(data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error stopping auto-gather:', error);
+        showAutoStatus('Error stopping auto-gather', 'error');
+    }
+}
+
+// Manually trigger auto-gathering
+async function scrapeNow() {
+    showAutoStatus('Scraping...', 'info');
+    
+    try {
+        const response = await fetch('/api/auto-gather/scrape-now', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showAutoStatus(`Scraped ${data.scraped} items (${data.filtered} filtered)`, 'success');
+            loadStatistics();
+            loadContent();
+        } else {
+            showAutoStatus('Error scraping', 'error');
+        }
+    } catch (error) {
+        console.error('Error in manual scrape:', error);
+        showAutoStatus('Error scraping', 'error');
+    }
+}
+
+// Show auto-gather status message
+function showAutoStatus(message, type) {
+    const statusDiv = document.getElementById('auto-status-message');
+    statusDiv.textContent = message;
+    statusDiv.className = `status-message ${type}`;
+    statusDiv.style.display = 'block';
+    
+    setTimeout(() => {
+        statusDiv.style.display = 'none';
+    }, 5000);
+}
+
+// AI-powered URL suggestions
+async function suggestAIUrls() {
+    const topic = document.getElementById('ai-topic-input').value.trim();
+    
+    if (!topic) {
+        showStatus('Please enter a topic', 'error');
+        return;
+    }
+    
+    const suggestionsDiv = document.getElementById('ai-suggestions');
+    suggestionsDiv.innerHTML = '<div class="loading">AI is finding relevant URLs...</div>';
+    
+    try {
+        const response = await fetch('/api/ai/suggest-urls', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ topic, count: 10 }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.urls && data.urls.length > 0) {
+            let html = '<h4>Suggested URLs:</h4><div class="ai-url-list">';
+            data.urls.forEach(url => {
+                html += `
+                    <div class="ai-url-item">
+                        <span>${url}</span>
+                        <button class="btn btn-secondary" onclick="scrapeAIUrl('${url}')">Scrape</button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            suggestionsDiv.innerHTML = html;
+        } else {
+            suggestionsDiv.innerHTML = '<p class="help-text">No URLs found. ' + (data.message || '') + '</p>';
+        }
+    } catch (error) {
+        console.error('Error suggesting URLs:', error);
+        suggestionsDiv.innerHTML = '<p class="help-text" style="color: red;">Error: ' + error.message + '</p>';
+    }
+}
+
+// Scrape a URL from AI suggestions
+async function scrapeAIUrl(url) {
+    showStatus(`Scraping ${url}...`, 'info');
+    
+    try {
+        const response = await fetch('/api/scrape', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showStatus(data.message, 'success');
+            loadStatistics();
+            loadContent();
+        } else {
+            showStatus(data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error scraping URL:', error);
+        showStatus('Error scraping URL', 'error');
+    }
 }

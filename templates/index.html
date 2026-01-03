@@ -11,6 +11,7 @@
         <header>
             <h1>🤖 AI Training Materials Scraper</h1>
             <p class="subtitle">Collect and organize AI training resources from across the web</p>
+            <a href="/settings" class="btn btn-secondary" style="display: inline-block; margin-top: 10px;">⚙️ Settings</a>
         </header>
 
         <!-- Statistics Dashboard -->
@@ -26,6 +27,10 @@
             <div class="stat-card">
                 <div class="stat-value" id="content-types">0</div>
                 <div class="stat-label">Content Types</div>
+            </div>
+            <div class="stat-card" id="ai-status-card" style="display: none;">
+                <div class="stat-value">✨ AI</div>
+                <div class="stat-label">Enabled</div>
             </div>
         </div>
 
@@ -46,6 +51,26 @@
                 <div class="quick-actions">
                     <button onclick="scrapeDefaults()" class="btn btn-secondary">Scrape Default Sources</button>
                     <button onclick="showBulkInput()" class="btn btn-secondary">Bulk Scrape</button>
+                    <button onclick="showAutoGather()" class="btn btn-success">⚙️ Auto-Gather</button>
+                </div>
+                
+                <!-- Auto-Gathering Controls -->
+                <div id="auto-gather-panel" class="auto-gather-panel" style="display: none;">
+                    <h3>🤖 Automatic Gathering</h3>
+                    <p class="help-text">Automatically scrape AI training materials on a schedule</p>
+                    
+                    <div class="auto-status">
+                        <span id="auto-status-text" class="status-badge">⏸️ Stopped</span>
+                        <span id="auto-sources-count">0 sources</span>
+                    </div>
+                    
+                    <div class="auto-controls">
+                        <button onclick="startAutoGather()" class="btn btn-success" id="start-auto-btn">▶️ Start</button>
+                        <button onclick="stopAutoGather()" class="btn btn-danger" id="stop-auto-btn" disabled>⏹️ Stop</button>
+                        <button onclick="scrapeNow()" class="btn btn-primary">🔄 Scrape Now</button>
+                    </div>
+                    
+                    <div id="auto-status-message" class="status-message"></div>
                 </div>
                 
                 <div id="bulk-input" class="bulk-input" style="display: none;">
@@ -55,6 +80,24 @@
                         rows="5"
                     ></textarea>
                     <button onclick="scrapeBulk()" class="btn btn-primary">Scrape All</button>
+                </div>
+                
+                <!-- AI-Powered Features -->
+                <div id="ai-features-panel" class="auto-gather-panel" style="display: none; margin-top: 15px;">
+                    <h3>✨ AI-Powered URL Discovery</h3>
+                    <p class="help-text">Use AI to find relevant training materials</p>
+                    
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="ai-topic-input" 
+                            placeholder="Enter a topic (e.g., 'neural networks')"
+                            class="url-input"
+                        >
+                        <button onclick="suggestAIUrls()" class="btn btn-primary">✨ Suggest URLs</button>
+                    </div>
+                    
+                    <div id="ai-suggestions" style="margin-top: 15px;"></div>
                 </div>
                 
                 <div id="scrape-status" class="status-message"></div>

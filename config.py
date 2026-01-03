@@ -25,3 +25,11 @@ DEFAULT_SOURCES = [
 # Flask configuration
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-production")
 DEBUG = os.environ.get("DEBUG", "True") == "True"
+
+# OpenRouter AI configuration
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_MODEL = "meta-llama/llama-3.1-8b-instruct:free"  # Free model
+
+# Settings file for persistent configuration
+SETTINGS_PATH = BASE_DIR / "settings.json"
