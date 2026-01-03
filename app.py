@@ -40,8 +40,6 @@ code_scraper = get_code_scraper()
 
 # Initialize exporter
 exporter = get_exporter()
-use_ai = settings_mgr.is_ai_enabled()
-scraper = AIContentScraper(use_ai=use_ai, ai_helper=ai_helper if use_ai else None)
 
 # Initialize auto gatherer
 auto_gatherer = get_auto_gatherer()

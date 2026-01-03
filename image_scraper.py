@@ -10,6 +10,9 @@ from models import ScrapedContent, get_session
 class ImageScraper:
     """Specialized scraper for extracting images for AI training."""
     
+    # Constants
+    GALLERY_CHECK_LIMIT = 5  # Limit for checking gallery/figure elements
+    
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": config.USER_AGENT})
@@ -129,7 +132,7 @@ class ImageScraper:
             "page_title": soup.title.string if soup.title else "",
             "meta_description": soup.find("meta", {"name": "description"}),
             "image_count": len(images),
-            "has_gallery": bool(soup.find_all(["gallery", "figure"], limit=5)),
+            "has_gallery": bool(soup.find_all(["gallery", "figure"], limit=self.GALLERY_CHECK_LIMIT)),
         }
     
     def _extract_alt_texts(self, soup: BeautifulSoup) -> List[str]:

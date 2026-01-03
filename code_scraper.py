@@ -10,6 +10,10 @@ from models import ScrapedContent, get_session
 class CodeScraper:
     """Specialized scraper for extracting code for AI training."""
     
+    # Constants
+    MAX_CODE_LENGTH = 1000  # Maximum code snippet length to store
+    MAX_CONTEXT_COUNT = 20  # Maximum number of code contexts to extract
+    
     # Common code-related HTML elements and classes
     CODE_SELECTORS = [
         "pre", "code", ".highlight", ".code-block", ".snippet",
@@ -195,7 +199,7 @@ class CodeScraper:
                     "code_preview": code_elem.get_text().strip()[:100]
                 })
         
-        return contexts[:20]  # Limit contexts
+        return contexts[:self.MAX_CONTEXT_COUNT]  # Limit contexts
     
     def save_to_db(self, scrape_result: Dict, source_type: str = "code_scraper") -> Dict:
         """Save code scrape results to database."""
@@ -220,7 +224,7 @@ class CodeScraper:
             code_snippets_formatted = []
             for snippet in scrape_result["code_snippets"]:
                 code_snippets_formatted.append({
-                    "code": snippet["code"][:1000],  # Limit length
+                    "code": snippet["code"][:self.MAX_CODE_LENGTH],  # Limit length
                     "language": snippet["language"],
                     "line_count": snippet["line_count"]
                 })
