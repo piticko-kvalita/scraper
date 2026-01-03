@@ -41,7 +41,25 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Running the Application
+### Quick Start
+
+The easiest way to get started:
+
+```bash
+python run.py
+```
+
+This script will:
+- Check your Python version
+- Install dependencies if needed
+- Initialize the database
+- Start the web server
+
+### Manual Setup
+
+Alternatively, you can run the application manually:
+
+#### Running the Application
 
 Start the web server:
 ```bash
@@ -71,6 +89,22 @@ The application will be available at `http://localhost:5000`
 
 5. **Export Data**:
    - Click "Export JSON" to download all scraped content
+
+### Programmatic Usage
+
+You can also use the scraper in your Python code. See `example.py` for examples:
+
+```python
+from scraper import AIContentScraper
+from models import init_db
+
+init_db()
+scraper = AIContentScraper()
+
+# Scrape a URL
+result = scraper.scrape_and_save("https://example.com/article")
+print(result)
+```
 
 ### API Endpoints
 
@@ -115,6 +149,8 @@ scraper/
 ├── models.py           # Database models
 ├── config.py           # Configuration settings
 ├── requirements.txt    # Python dependencies
+├── run.py              # Quick start script
+├── example.py          # Programmatic usage examples
 ├── templates/
 │   └── index.html      # Main HTML template
 ├── static/
