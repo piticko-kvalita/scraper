@@ -200,8 +200,18 @@ class AIContentScraper:
         # Extract YouTube embeds
         for iframe in soup.find_all("iframe"):
             src = iframe.get("src", "")
-            if "youtube.com" in src or "youtu.be" in src:
-                videos.append(src)
+            if src:
+                # Properly validate YouTube URLs
+                from urllib.parse import urlparse
+                try:
+                    parsed = urlparse(src)
+                    # Check if domain ends with youtube.com or is youtu.be
+                    if (parsed.netloc.endswith("youtube.com") or 
+                        parsed.netloc == "youtu.be" or
+                        parsed.netloc.endswith(".youtube.com")):
+                        videos.append(src)
+                except Exception:
+                    pass
         
         return videos[:10]  # Limit to 10 videos
     
