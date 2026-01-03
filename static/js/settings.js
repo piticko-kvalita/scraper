@@ -85,9 +85,14 @@ async function saveSettings() {
     }
     
     // Validate
-    if (aiEnabled && !settings.openrouter_api_key && document.getElementById('api-key').placeholder.startsWith('Enter')) {
-        showStatus('Please enter an OpenRouter API key to enable AI features', 'error');
-        return;
+    if (aiEnabled && !settings.openrouter_api_key) {
+        const currentPlaceholder = document.getElementById('api-key').placeholder;
+        const hasExistingKey = currentPlaceholder && !currentPlaceholder.startsWith('sk-or-v1') && currentPlaceholder.includes('•');
+        
+        if (!hasExistingKey) {
+            showStatus('Please enter an OpenRouter API key to enable AI features', 'error');
+            return;
+        }
     }
     
     try {

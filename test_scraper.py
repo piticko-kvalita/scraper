@@ -74,12 +74,15 @@ class TestContentExtraction(unittest.TestCase):
         # Test tutorial detection
         url = "https://example.com/tutorial-machine-learning"
         soup = BeautifulSoup("<html></html>", "html.parser")
-        content_type = self.scraper._determine_content_type(url, soup)
+        images = []
+        videos = []
+        code_snippets = []
+        content_type = self.scraper._determine_content_type(url, soup, images, videos, code_snippets)
         self.assertEqual(content_type, "tutorial")
         
         # Test documentation detection
         url = "https://example.com/docs/api"
-        content_type = self.scraper._determine_content_type(url, soup)
+        content_type = self.scraper._determine_content_type(url, soup, images, videos, code_snippets)
         self.assertEqual(content_type, "documentation")
 
 

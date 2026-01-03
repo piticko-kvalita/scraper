@@ -40,7 +40,7 @@ class AIHelper:
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": "https://github.com/piticko-kvalita/scraper",
+                "HTTP-Referer": config.BASE_DIR.as_uri() if hasattr(config, 'BASE_DIR') else "https://github.com/scraper",
             }
             
             data = {
