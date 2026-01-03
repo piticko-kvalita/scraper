@@ -642,6 +642,14 @@ async function scrapeUniversal() {
         return;
     }
     
+    // Basic URL validation
+    try {
+        new URL(url);
+    } catch {
+        showStatus('Please enter a valid URL (e.g., https://example.com)', 'error');
+        return;
+    }
+    
     showStatus('Scraping all AI training materials...', 'info');
     const resultsDiv = document.getElementById('universal-results');
     resultsDiv.innerHTML = '<div class="loading">🔄 Extracting all material types...</div>';

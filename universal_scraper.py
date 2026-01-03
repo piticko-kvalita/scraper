@@ -132,7 +132,6 @@ class UniversalAIScraper:
         for iframe in soup.find_all("iframe"):
             src = iframe.get("src", "")
             if src:
-                from urllib.parse import urlparse
                 try:
                     parsed = urlparse(src)
                     netloc = parsed.netloc.lower()
@@ -142,7 +141,7 @@ class UniversalAIScraper:
                             "type": "embed",
                             "platform": netloc,
                         })
-                except:
+                except Exception:
                     pass
         
         return videos[:20]
@@ -293,11 +292,12 @@ class UniversalAIScraper:
                     rows.append(cells)
             
             if rows:
+                column_count = len(headers) if headers else (len(rows[0]) if rows[0] else 0)
                 tables.append({
                     "headers": headers,
                     "rows": rows[:100],  # Limit rows
                     "row_count": len(rows),
-                    "column_count": len(headers) or len(rows[0]) if rows else 0,
+                    "column_count": column_count,
                 })
         
         return tables[:10]
