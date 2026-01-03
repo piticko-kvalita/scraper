@@ -54,6 +54,62 @@
                     <button onclick="showAutoGather()" class="btn btn-success">⚙️ Auto-Gather</button>
                 </div>
                 
+                <!-- Specialized Scrapers -->
+                <div class="specialized-scrapers" style="margin-top: 15px;">
+                    <h3>🎯 Specialized Scrapers</h3>
+                    <p class="help-text">Run dedicated scrapers for specific content types</p>
+                    <div class="scraper-buttons">
+                        <button onclick="showImageScraper()" class="btn btn-primary">🖼️ Image Scraper</button>
+                        <button onclick="showCodeScraper()" class="btn btn-primary">💻 Code Scraper</button>
+                    </div>
+                </div>
+                
+                <!-- Image Scraper Panel -->
+                <div id="image-scraper-panel" class="scraper-panel" style="display: none;">
+                    <h4>🖼️ Image Scraper</h4>
+                    <p class="help-text">Extract images for AI training (computer vision, image generation)</p>
+                    <div class="input-group">
+                        <input 
+                            type="url" 
+                            id="image-url-input" 
+                            placeholder="Enter URL with images"
+                            class="url-input"
+                        >
+                        <input 
+                            type="number" 
+                            id="min-images-input" 
+                            placeholder="Min images (default: 5)"
+                            class="url-input"
+                            style="max-width: 200px;"
+                            value="5"
+                        >
+                        <button onclick="scrapeImages()" class="btn btn-primary">Scrape Images</button>
+                    </div>
+                </div>
+                
+                <!-- Code Scraper Panel -->
+                <div id="code-scraper-panel" class="scraper-panel" style="display: none;">
+                    <h4>💻 Code Scraper</h4>
+                    <p class="help-text">Extract code snippets for AI training (code completion, generation)</p>
+                    <div class="input-group">
+                        <input 
+                            type="url" 
+                            id="code-url-input" 
+                            placeholder="Enter URL with code examples"
+                            class="url-input"
+                        >
+                        <input 
+                            type="number" 
+                            id="min-snippets-input" 
+                            placeholder="Min snippets (default: 3)"
+                            class="url-input"
+                            style="max-width: 200px;"
+                            value="3"
+                        >
+                        <button onclick="scrapeCode()" class="btn btn-primary">Scrape Code</button>
+                    </div>
+                </div>
+                
                 <!-- Auto-Gathering Controls -->
                 <div id="auto-gather-panel" class="auto-gather-panel" style="display: none;">
                     <h3>🤖 Automatic Gathering</h3>
@@ -110,7 +166,36 @@
                 <h2>Scraped Content</h2>
                 <div class="actions">
                     <button onclick="refreshContent()" class="btn btn-secondary">Refresh</button>
-                    <button onclick="exportData()" class="btn btn-success">Export JSON</button>
+                    <button onclick="showExportOptions()" class="btn btn-success">📥 Export Options</button>
+                </div>
+            </div>
+            
+            <!-- Export Options Panel -->
+            <div id="export-options-panel" class="export-panel" style="display: none;">
+                <h3>📥 Export Options</h3>
+                <p class="help-text">Choose format and filters for export</p>
+                
+                <div class="export-options">
+                    <div class="export-section">
+                        <h4>All Data</h4>
+                        <button onclick="exportJSON()" class="btn btn-secondary">JSON (All)</button>
+                        <button onclick="exportCSV()" class="btn btn-secondary">CSV (All)</button>
+                    </div>
+                    
+                    <div class="export-section">
+                        <h4>By Content Type</h4>
+                        <button onclick="exportByType('image')" class="btn btn-secondary">🖼️ Images Only</button>
+                        <button onclick="exportByType('code')" class="btn btn-secondary">💻 Code Only</button>
+                        <button onclick="exportByType('article')" class="btn btn-secondary">📄 Articles</button>
+                        <button onclick="exportByType('tutorial')" class="btn btn-secondary">📚 Tutorials</button>
+                    </div>
+                    
+                    <div class="export-section">
+                        <h4>Training Ready</h4>
+                        <button onclick="exportTraining()" class="btn btn-primary">🎯 All Training Data</button>
+                        <button onclick="exportTraining('image')" class="btn btn-primary">🖼️ Image Training</button>
+                        <button onclick="exportTraining('code')" class="btn btn-primary">💻 Code Training</button>
+                    </div>
                 </div>
             </div>
             

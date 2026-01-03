@@ -500,3 +500,126 @@ async function scrapeAIUrl(url) {
         showStatus('Error scraping URL', 'error');
     }
 }
+
+// Specialized Scraper Functions
+
+function showImageScraper() {
+    const panel = document.getElementById('image-scraper-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    // Hide other panels
+    document.getElementById('code-scraper-panel').style.display = 'none';
+}
+
+function showCodeScraper() {
+    const panel = document.getElementById('code-scraper-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    // Hide other panels
+    document.getElementById('image-scraper-panel').style.display = 'none';
+}
+
+async function scrapeImages() {
+    const url = document.getElementById('image-url-input').value.trim();
+    const minImages = parseInt(document.getElementById('min-images-input').value) || 5;
+    
+    if (!url) {
+        showStatus('Please enter a URL', 'error');
+        return;
+    }
+    
+    showStatus('Scraping images...', 'info');
+    
+    try {
+        const response = await fetch('/api/scrape/images', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url, min_images: minImages }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showStatus(`✅ ${data.message}`, 'success');
+            document.getElementById('image-url-input').value = '';
+            loadStatistics();
+            loadContent();
+        } else {
+            showStatus(`❌ ${data.message}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error scraping images:', error);
+        showStatus('Error scraping images', 'error');
+    }
+}
+
+async function scrapeCode() {
+    const url = document.getElementById('code-url-input').value.trim();
+    const minSnippets = parseInt(document.getElementById('min-snippets-input').value) || 3;
+    
+    if (!url) {
+        showStatus('Please enter a URL', 'error');
+        return;
+    }
+    
+    showStatus('Scraping code...', 'info');
+    
+    try {
+        const response = await fetch('/api/scrape/code', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url, min_snippets: minSnippets }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showStatus(`✅ ${data.message}`, 'success');
+            document.getElementById('code-url-input').value = '';
+            loadStatistics();
+            loadContent();
+        } else {
+            showStatus(`❌ ${data.message}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error scraping code:', error);
+        showStatus('Error scraping code', 'error');
+    }
+}
+
+// Enhanced Export Functions
+
+function showExportOptions() {
+    const panel = document.getElementById('export-options-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function exportJSON() {
+    window.location.href = '/api/export';
+}
+
+function exportCSV() {
+    window.location.href = '/api/export/csv';
+}
+
+function exportByType(contentType) {
+    if (contentType === 'image') {
+        // Export images in special format
+        window.location.href = '/api/export/images';
+    } else if (contentType === 'code') {
+        // Export code in special format
+        window.location.href = '/api/export/code';
+    } else {
+        // Export filtered JSON
+        window.location.href = `/api/export/filtered?content_type=${contentType}`;
+    }
+}
+
+function exportTraining(contentType = null) {
+    const url = contentType 
+        ? `/api/export/training?content_type=${contentType}`
+        : '/api/export/training';
+    window.location.href = url;
+}
