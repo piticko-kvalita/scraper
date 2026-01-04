@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - AI Training Materials Scraper</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Settings</h1>
+            <p class="subtitle">Configure your AI scraper</p>
+            <a href="/" class="btn btn-secondary" style="display: inline-block; margin-top: 10px;">← Back to Home</a>
+        </header>
+
+        <!-- AI Configuration -->
+        <div class="card">
+            <h2>🤖 AI Configuration (OpenRouter)</h2>
+            <p class="help-text">Enable AI-powered features for better link discovery, content filtering, and classification.</p>
+            
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="api-key">OpenRouter API Key</label>
+                    <input 
+                        type="password" 
+                        id="api-key" 
+                        class="form-input"
+                        placeholder="sk-or-v1-..."
+                    >
+                    <small class="help-text">
+                        Get your free API key from <a href="https://openrouter.ai/keys" target="_blank">OpenRouter</a>
+                    </small>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="ai-enabled">
+                        Enable AI-powered features
+                    </label>
+                </div>
+                
+                <div class="ai-features" id="ai-features-info" style="display: none;">
+                    <h4>AI Features:</h4>
+                    <ul>
+                        <li>✨ Intelligent URL suggestions based on topics</li>
+                        <li>🔍 Advanced content quality filtering</li>
+                        <li>📂 Smart content type classification</li>
+                        <li>🎯 Related search query suggestions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scraper Configuration -->
+        <div class="card">
+            <h2>🔧 Scraper Configuration</h2>
+            
+            <div class="settings-form">
+                <div class="form-group">
+                    <label for="quality-threshold">Quality Threshold (0.0 - 1.0)</label>
+                    <input 
+                        type="number" 
+                        id="quality-threshold" 
+                        class="form-input"
+                        min="0" 
+                        max="1" 
+                        step="0.1"
+                        value="0.3"
+                    >
+                    <small class="help-text">Content with lower quality score will be filtered out</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="auto-interval">Auto-Gather Interval (hours)</label>
+                    <input 
+                        type="number" 
+                        id="auto-interval" 
+                        class="form-input"
+                        min="1" 
+                        max="168"
+                        value="24"
+                    >
+                    <small class="help-text">How often to automatically scrape configured sources</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="card">
+            <button onclick="saveSettings()" class="btn btn-primary btn-large">💾 Save Settings</button>
+            <div id="settings-status" class="status-message"></div>
+        </div>
+
+        <!-- API Status -->
+        <div class="card">
+            <h2>📊 Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <span class="status-label">AI Status:</span>
+                    <span id="ai-status" class="status-badge">❌ Not Configured</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">API Key:</span>
+                    <span id="api-key-status" class="status-value">Not Set</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</body>
+</html>
